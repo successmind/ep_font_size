@@ -63,23 +63,25 @@ exports.exportHtmlAdditionalTags = function(hook, pad, cb){
   cb(sizes);
 };
 
-/*
 // This doesn't feel write.....
 // We change <fs*>into <span style="font-size:*px> and </fs* into </....
 // This is a fix for https://github.com/ether/etherpad-lite/issues/2485
 exports.getLineHTMLForExport = function (hook, context) {
-  var lineContent = context.lineContent;
-  sizes.forEach(function(size){
-    size = size.replace("fs","");
-    lineContent = lineContent.replace("<fs"+size, "<span style='font-size:"+size+"px'");
-    lineContent = lineContent.replace("</fs"+size, "</span");
-  });
-  return lineContent;
+    var lineContent = context.lineContent;
+    if (lineContent.indexOf('<fs') != -1) {
+        sizes.forEach(function (size) {
+            size = size.replace("fs", "");
+            lineContent = lineContent.replace("<fs" + size, "<span style='font-size:" + size + "px'");
+            lineContent = lineContent.replace("</fs" + size, "</span");
+        });
+        if (lineContent.slice(-4) != '<br>')
+            lineContent = lineContent + '<br>';
+        context.lineContent = lineContent;
+    }
 }
-*/
 
 exports.asyncLineHTMLForExport = function (hook, context, cb) {
-  cb(rewriteLine);
+  //cb(rewriteLine);
 }
 
 function rewriteLine(context){
